@@ -7,7 +7,7 @@ import (
 )
 
 func main(){
-  mjd := getMJD(2018, 3, 9, 10, 58)
+  mjd := getMJD(2009, 12, 31, 11, 59)
   xyz := getXYZ(mjd)
   fmt.Printf("%v\n", mjd)
   fmt.Printf("%v\n", xyz)
@@ -43,20 +43,27 @@ func getMJD(year, month, day, hour, minute int) float64 {
 */
 func getXYZ(mjd float64) float64{
   //軌道長半径
-  semiMajorAxis := 0.3871//いったん水星
+  //semiMajorAxis := 0.3871//いったん水星
 
   //近日点通過時
   perihelionPassageMJD := getMJD(2018, 3, 10, 10, 58)//いったん水星
 
   //平均日々運動
-  meanMotion := 0.985647365 * math.Pow(semiMajorAxis, -1.5)
+  //meanMotion := 0.985647365 * math.Pow(semiMajorAxis, -1.5)
+  meanMotion := 360 / 365.24219 / 0.2408467
+
+  //近日点引数
+  perihelionArgument := 77.5806
 
   //平均近点離角。
   //近日点通過時からの経過日数に比例し
   //近日点通過時に0度、遠日点通過時に180度となる。
   meanAnomaly := surplusFloat(meanMotion * (mjd - perihelionPassageMJD), 360)
 
-  return meanAnomaly
+  //日心黄経
+  heliocentricLongitude := surplusFloat(meanAnomaly + perihelionArgument, 360)
+
+  return heliocentricLongitude
 }
 
 
