@@ -7,6 +7,7 @@ import (
 
 func main(){
   mjd := getMJD(2009, 12, 31, 11, 59)
+  fmt.Print(mercury)
   xyz := getXYZ(mjd, mercury)
   fmt.Printf("%v\n", mjd)
   fmt.Printf("%v\n", xyz)
@@ -40,19 +41,25 @@ func getMJD(year, month, day, hour, minute int) float64 {
   @param 修正ユリウス日
   @return 座標
 */
-func getXYZ(mjd float64, planet map[string]float64) [][]float64{
+func getXYZ(mjd float64, planet Planet) [][]float64{
   //軌道長半径
-  semiMajorAxis := planet["semiMajorAxis"]//いったん水星
+  semiMajorAxis := planet.semiMajorAxis//いったん水星
 
   //近日点通過時M
-  perihelionPassageMJD := getMJD(2018, 3, 10, 10, 58)//いったん水星
+  perihelionPassageMJD := getMJD(
+    planet.MJD.year,
+    planet.MJD.month,
+    planet.MJD.day,
+    planet.MJD.hour,
+    planet.MJD.minute,
+  )
 
   //平均日々運動
   //meanMotion := 0.985647365 * math.Pow(semiMajorAxis, -1.5)
-  meanMotion := 360 / 365.242189 / 0.2408467
+  meanMotion := 360 / 365.242189 / planet.orbitalPeriod
 
   //近日点引数ω
-  perihelionArgument := 77.5806
+  perihelionArgument := planet.perihelionArgument
 
   //平均近点離角。
   //近日点通過時からの経過日数に比例し
