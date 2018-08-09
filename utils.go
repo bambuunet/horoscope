@@ -20,8 +20,8 @@ func dotMatrix(matrix1 [][]float64, matrix2 [][]float64) [][]float64{
         result[i1][i2] += matrix1[i1][i3] * matrix2[i3][i2]
       }
     }
- }
- return result
+  }
+  return result
 }
 
 /*

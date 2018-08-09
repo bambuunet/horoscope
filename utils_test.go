@@ -10,4 +10,5 @@ func TestDotMatrix(t *testing.T){
   matrix2 := [][]float64{{1, 2, 0, 1}, {1, 0, 1, 1}}
   result := dotMatrix(matrix1, matrix2)
   fmt.Print(result)
+  fmt.Print("\n")
 }

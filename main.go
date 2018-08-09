@@ -7,7 +7,7 @@ import (
 
 func main(){
   mjd := getMJD(2009, 12, 31, 11, 59)
-  xyz := getXYZ(mjd)
+  xyz := getXYZ(mjd, mercury)
   fmt.Printf("%v\n", mjd)
   fmt.Printf("%v\n", xyz)
 }
@@ -40,16 +40,16 @@ func getMJD(year, month, day, hour, minute int) float64 {
   @param 修正ユリウス日
   @return 座標
 */
-func getXYZ(mjd float64) float64{
+func getXYZ(mjd float64, planet map[string]float64) [][]float64{
   //軌道長半径
-  //semiMajorAxis := 0.3871//いったん水星
+  semiMajorAxis := planet["semiMajorAxis"]//いったん水星
 
   //近日点通過時M
   perihelionPassageMJD := getMJD(2018, 3, 10, 10, 58)//いったん水星
 
   //平均日々運動
   //meanMotion := 0.985647365 * math.Pow(semiMajorAxis, -1.5)
-  meanMotion := 360 / 365.24219 / 0.2408467
+  meanMotion := 360 / 365.242189 / 0.2408467
 
   //近日点引数ω
   perihelionArgument := 77.5806
@@ -72,26 +72,29 @@ func getXYZ(mjd float64) float64{
   inclination := 7.0051
 
   //行列計算
-  matrix1 := [3][3]{
+  matrix1 := [][]float64{
     {math.Cos(longitudeOfAscendingNode), math.Sin(longitudeOfAscendingNode), 0},
     {math.Sin(longitudeOfAscendingNode), math.Cos(longitudeOfAscendingNode), 0},
     {0, 0, 1},
   }
-  matrix2 := [3][2]{
+  matrix2 := [][]float64{
     {1, 0},
     {0, math.Cos(inclination)},
     {0, math.Sin(inclination)},
   }
-  matrix3 := [2][2]{
+  matrix3 := [][]float64{
     {math.Cos(perihelionArgument), - math.Sin(perihelionArgument)},
     {math.Sin(perihelionArgument), math.Cos(perihelionArgument)},
   }
-  matrix4 := [2][1]{
-    {},
-    {},
+  matrix4 := [][]float64{
+    {semiMajorAxis * math.Sqrt(1 - math.Pow(eccentricity, 2)) * math.Cos(longitudeOfHeliocentric) - semiMajorAxis * eccentricity},
+    {semiMajorAxis * math.Sqrt(1 - math.Pow(eccentricity, 2)) * math.Sin(longitudeOfHeliocentric)},
   }
+  xyz := dotMatrix(matrix1, matrix2)
+  xyz = dotMatrix(xyz, matrix3)
+  xyz = dotMatrix(xyz, matrix4)
 
-  return 
+  return xyz
 }
 
 
