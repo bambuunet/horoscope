@@ -2,7 +2,6 @@ package main
 
 import (
   "fmt"
-  "reflect"
   "math"
 )
 
@@ -45,14 +44,14 @@ func getXYZ(mjd float64) float64{
   //軌道長半径
   //semiMajorAxis := 0.3871//いったん水星
 
-  //近日点通過時
+  //近日点通過時M
   perihelionPassageMJD := getMJD(2018, 3, 10, 10, 58)//いったん水星
 
   //平均日々運動
   //meanMotion := 0.985647365 * math.Pow(semiMajorAxis, -1.5)
   meanMotion := 360 / 365.24219 / 0.2408467
 
-  //近日点引数
+  //近日点引数ω
   perihelionArgument := 77.5806
 
   //平均近点離角。
@@ -61,27 +60,39 @@ func getXYZ(mjd float64) float64{
   meanAnomaly := surplusFloat(meanMotion * (mjd - perihelionPassageMJD), 360)
 
   //日心黄経
-  heliocentricLongitude := surplusFloat(meanAnomaly + perihelionArgument, 360)
+  longitudeOfHeliocentric := surplusFloat(meanAnomaly + perihelionArgument, 360)
 
-  return heliocentricLongitude
-}
+  //離心率e
+  eccentricity := 0.20563069
 
+  //昇交点黄経Ω
+  longitudeOfAscendingNode := 48.4257
 
-/*
-  float型の剰余を取得
-  @param 割られる数、割る数
-  @return 剰余
-*/
-func surplusFloat(dividend float64, divisor interface{}) float64{
+  //軌道傾斜角i
+  inclination := 7.0051
 
-  r := reflect.ValueOf(divisor)
-  var divisor2 float64
-  switch r.Kind() {
-    case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-      divisor2 = float64(r.Int())
-    default:
-      divisor2 = r.Float()
+  //行列計算
+  matrix1 := [3][3]{
+    {math.Cos(longitudeOfAscendingNode), math.Sin(longitudeOfAscendingNode), 0},
+    {math.Sin(longitudeOfAscendingNode), math.Cos(longitudeOfAscendingNode), 0},
+    {0, 0, 1},
+  }
+  matrix2 := [3][2]{
+    {1, 0},
+    {0, math.Cos(inclination)},
+    {0, math.Sin(inclination)},
+  }
+  matrix3 := [2][2]{
+    {math.Cos(perihelionArgument), - math.Sin(perihelionArgument)},
+    {math.Sin(perihelionArgument), math.Cos(perihelionArgument)},
+  }
+  matrix4 := [2][1]{
+    {},
+    {},
   }
 
-  return dividend - math.Floor(dividend / divisor2) * divisor2
+  return 
 }
+
+
+
