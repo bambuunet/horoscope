@@ -2,7 +2,7 @@ package main
 
 type Planet struct{
   semiMajorAxis float64
-  MJD Datetime
+  perihelionPassageMJD Datetime
   orbitalPeriod float64 //P
   perihelionArgument float64 //ω
   eccentricity float64 //e
@@ -25,7 +25,7 @@ type XYZ struct{
 }
 
 var Mercury = Planet{
-  semiMajorAxis: 0.3871,
+  semiMajorAxis: 0.3871, //a
   perihelionPassageMJD: Datetime{
     year: 2018,
     month: 3,
@@ -41,7 +41,7 @@ var Mercury = Planet{
 }
 
 var Earth = Planet{
-  semiMajorAxis: 1,
+  semiMajorAxis: 1, //a
   perihelionPassageMJD: Datetime{
     year: 2018,
     month: 1,
@@ -57,33 +57,33 @@ var Earth = Planet{
 }
 
 var Mars = Planet{
-  semiMajorAxis: 1.52368,
-    MJD: Datetime{
-    year: 2018,
-    month: 9,
-    day: 16,
-    hour:21,
-    minute: 53,
-  },
-  orbitalPeriod: 1.880866, //P
-  perihelionArgument: 336.2075, //ω
-  eccentricity: 0.09341233, //e
-  longitudeOfAscendingNode: 49.6198, //Ω
-  inclination:  1.8497, //i
-}
-
-var Neptune = Planet{
-  semiMajorAxis: 1.52368,
+  semiMajorAxis: 1.52368, //a
   perihelionPassageMJD: Datetime{
     year: 2018,
     month: 9,
     day: 16,
-    hour:21,
+    hour: 12,
     minute: 53,
   },
   orbitalPeriod: 1.880866, //P
   perihelionArgument: 336.2075, //ω
   eccentricity: 0.09341233, //e
   longitudeOfAscendingNode: 49.6198, //Ω
-  inclination:  1.8497, //i
+  inclination: 1.8497, //i
+}
+
+var Neptune = Planet{
+  semiMajorAxis: 30.06896348, //a
+  perihelionPassageMJD: Datetime{
+    year: 2051,
+    month: 1,
+    day: 1,
+    hour: 0,
+    minute: 0,
+  },
+  orbitalPeriod: 164.79, //P
+  perihelionArgument: 44.97135, //ω
+  eccentricity:   0.00858587, //e
+  longitudeOfAscendingNode: 131.72169, //Ω
+  inclination:  1.769, //i
 }

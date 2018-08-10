@@ -11,8 +11,8 @@ var EarthXYZ XYZ
 func main(){
   datetime := Datetime{
     year: 2018,
-    month: 8,
-    day: 10,
+    month: 7,
+    day: 31,
     hour: 11,
     minute: 59,
   }
@@ -25,12 +25,22 @@ func main(){
   MercuryXYZ := getHeliocentricXYZ(Mercury)
   MercuryAngle := getGeocentricAngle(MercuryXYZ)
   fmt.Printf("%v\n", MercuryXYZ)
-  fmt.Printf("%v\n", MercuryAngle)
+  fmt.Printf("%v\n\n\n", MercuryAngle)
+
+  EarthXYZ := getHeliocentricXYZ(Earth)
+  EarthAngle := getGeocentricAngle(EarthXYZ)
+  fmt.Printf("%v\n", EarthXYZ)
+  fmt.Printf("%v\n\n\n", EarthAngle)
 
   MarsXYZ := getHeliocentricXYZ(Mars)
   MarsAngle := getGeocentricAngle(MarsXYZ)
   fmt.Printf("%v\n", MarsXYZ)
-  fmt.Printf("%v\n", MarsAngle)
+  fmt.Printf("%v\n\n\n", MarsAngle)
+
+  NeptuneXYZ := getHeliocentricXYZ(Neptune)
+  NeptuneAngle := getGeocentricAngle(NeptuneXYZ)
+  fmt.Printf("%v\n", NeptuneXYZ)
+  fmt.Printf("%v\n\n\n", NeptuneAngle)
 }
 
 /*
@@ -71,7 +81,7 @@ func getGeocentricAngle(planetXYZ XYZ) float64{
 */
 func getHeliocentricXYZ(planet Planet) XYZ{
   //軌道長半径
-  semiMajorAxis := planet.semiMajorAxis//いったん水星
+  semiMajorAxis := planet.semiMajorAxis
 
   //近日点通過時M
   perihelionPassageMJD := getMJD(
@@ -110,26 +120,36 @@ func getHeliocentricXYZ(planet Planet) XYZ{
 
   //行列計算
   matrix1 := [][]float64{
-    {math.Cos(longitudeOfAscendingNode), math.Sin(longitudeOfAscendingNode), 0},
-    {math.Sin(longitudeOfAscendingNode), math.Cos(longitudeOfAscendingNode), 0},
+    {math.Cos(longitudeOfAscendingNode * math.Pi / 180), math.Sin(longitudeOfAscendingNode * math.Pi / 180), 0},
+    {math.Sin(longitudeOfAscendingNode * math.Pi / 180), math.Cos(longitudeOfAscendingNode * math.Pi / 180), 0},
     {0, 0, 1},
   }
   matrix2 := [][]float64{
     {1, 0},
-    {0, math.Cos(inclination)},
-    {0, math.Sin(inclination)},
+    {0, math.Cos(inclination * math.Pi / 180)},
+    {0, math.Sin(inclination * math.Pi / 180)},
   }
   matrix3 := [][]float64{
-    {math.Cos(perihelionArgument), - math.Sin(perihelionArgument)},
-    {math.Sin(perihelionArgument), math.Cos(perihelionArgument)},
+    {math.Cos(perihelionArgument * math.Pi / 180), - math.Sin(perihelionArgument * math.Pi / 180)},
+    {math.Sin(perihelionArgument * math.Pi / 180), math.Cos(perihelionArgument * math.Pi / 180)},
   }
   matrix4 := [][]float64{
-    {semiMajorAxis * math.Sqrt(1 - math.Pow(eccentricity, 2)) * math.Cos(longitudeOfHeliocentric) - semiMajorAxis * eccentricity},
-    {semiMajorAxis * math.Sqrt(1 - math.Pow(eccentricity, 2)) * math.Sin(longitudeOfHeliocentric)},
+    {semiMajorAxis * math.Sqrt(1 - math.Pow(eccentricity, 2)) * math.Cos(longitudeOfHeliocentric * math.Pi / 180) - (semiMajorAxis * eccentricity)},
+    {semiMajorAxis * math.Sqrt(1 - math.Pow(eccentricity, 2)) * math.Sin(longitudeOfHeliocentric * math.Pi / 180)},
   }
+
+  fmt.Print(matrix1,"\n")
+  fmt.Print(matrix2,"\n")
+  fmt.Print(matrix3,"\n")
+  fmt.Print(matrix4,"\n\n")
+
+
   xyz := dotMatrix(matrix1, matrix2)
+  fmt.Print(xyz," 1\n")
   xyz = dotMatrix(xyz, matrix3)
+  fmt.Print(xyz," 2\n")
   xyz = dotMatrix(xyz, matrix4)
+  fmt.Print(xyz," 3\n\n")
 
   return XYZ{
     x: xyz[0][0],
