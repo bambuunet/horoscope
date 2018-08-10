@@ -3,7 +3,7 @@ package main
 import (
   "testing"
   "fmt"
-  "math"
+  //"math"
 )
 
 func TestGetHeliocentricXYZ(t *testing.T){
@@ -17,26 +17,29 @@ func TestGetHeliocentricXYZ(t *testing.T){
     },
   )
 
-  xyz := getHeliocentricXYZ(mercury)
-  fmt.Print("TestGetHeliocentricXYZ: ")
+  xyz := getHeliocentricXYZ(Mercury)
+
+  fmt.Print("TestGetHeliocentricXYZ: \n")
   fmt.Print(xyz)
-  fmt.Print("\n")
+  fmt.Print("\n\n")
 }
 
 func TestGetGeocentricAngle(t *testing.T){
   xyz := XYZ{
     x: 1,
-    y: 1,
+    y: -1,
     z: 0,
   }
-  earthXYZ = XYZ{
+
+  EarthXYZ = XYZ{
     x: 0,
     y: 0,
     z: 0,
   }
-  fmt.Print(math.Atan2(1, 1))
+
   angle := getGeocentricAngle(xyz)
-  fmt.Print("TestGetGeocentricAngle: ")
+
+  fmt.Print("TestGetGeocentricAngle: \n")
   fmt.Print(angle)
-  fmt.Print("\n")
+  fmt.Print("\n\n")
 }

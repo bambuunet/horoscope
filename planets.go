@@ -24,9 +24,9 @@ type XYZ struct{
   z float64
 }
 
-var mercury = Planet{
+var Mercury = Planet{
   semiMajorAxis: 0.3871,
-  MJD: Datetime{
+  perihelionPassageMJD: Datetime{
     year: 2018,
     month: 3,
     day: 10,
@@ -40,9 +40,9 @@ var mercury = Planet{
   inclination: 7.0051, //i
 }
 
-var earth = Planet{
+var Earth = Planet{
   semiMajorAxis: 1,
-  MJD: Datetime{
+  perihelionPassageMJD: Datetime{
     year: 2018,
     month: 1,
     day: 3,
@@ -54,4 +54,36 @@ var earth = Planet{
   eccentricity: 0.01671022, //e
   longitudeOfAscendingNode: 174.838, //Ω
   inclination:  0.002, //i
+}
+
+var Mars = Planet{
+  semiMajorAxis: 1.52368,
+    MJD: Datetime{
+    year: 2018,
+    month: 9,
+    day: 16,
+    hour:21,
+    minute: 53,
+  },
+  orbitalPeriod: 1.880866, //P
+  perihelionArgument: 336.2075, //ω
+  eccentricity: 0.09341233, //e
+  longitudeOfAscendingNode: 49.6198, //Ω
+  inclination:  1.8497, //i
+}
+
+var Neptune = Planet{
+  semiMajorAxis: 1.52368,
+  perihelionPassageMJD: Datetime{
+    year: 2018,
+    month: 9,
+    day: 16,
+    hour:21,
+    minute: 53,
+  },
+  orbitalPeriod: 1.880866, //P
+  perihelionArgument: 336.2075, //ω
+  eccentricity: 0.09341233, //e
+  longitudeOfAscendingNode: 49.6198, //Ω
+  inclination:  1.8497, //i
 }

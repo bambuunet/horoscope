@@ -6,13 +6,13 @@ import (
 )
 
 var MJD float64
-var earthXYZ XYZ
+var EarthXYZ XYZ
 
 func main(){
   datetime := Datetime{
     year: 2018,
-    month: 12,
-    day: 31,
+    month: 8,
+    day: 10,
     hour: 11,
     minute: 59,
   }
@@ -20,10 +20,17 @@ func main(){
   setMJD(datetime)
   setEarthXYZ()
 
-  mercuryXYZ := getHeliocentricXYZ(mercury)
-
   fmt.Printf("%v\n", MJD)
-  fmt.Printf("%v\n", mercuryXYZ)
+
+  MercuryXYZ := getHeliocentricXYZ(Mercury)
+  MercuryAngle := getGeocentricAngle(MercuryXYZ)
+  fmt.Printf("%v\n", MercuryXYZ)
+  fmt.Printf("%v\n", MercuryAngle)
+
+  MarsXYZ := getHeliocentricXYZ(Mars)
+  MarsAngle := getGeocentricAngle(MarsXYZ)
+  fmt.Printf("%v\n", MarsXYZ)
+  fmt.Printf("%v\n", MarsAngle)
 }
 
 /*
@@ -39,7 +46,7 @@ func setMJD(dt Datetime) {
   @param 修正ユリウス日
 */
 func setEarthXYZ() {
-  earthXYZ = getHeliocentricXYZ(earth)
+  EarthXYZ = getHeliocentricXYZ(Earth)
 }
 
 /*
@@ -48,9 +55,13 @@ func setEarthXYZ() {
   @return 座標
 */
 func getGeocentricAngle(planetXYZ XYZ) float64{
-  x := planetXYZ.x - earthXYZ.x
-  y := planetXYZ.y - earthXYZ.y
-  return math.Atan2(y, x)
+  x := planetXYZ.x - EarthXYZ.x
+  y := planetXYZ.y - EarthXYZ.y
+  angle := math.Atan2(y, x) * 180 / math.Pi
+  if angle < 0{
+    angle += 360
+  }
+  return angle
 }
 
 /*
@@ -65,11 +76,11 @@ func getHeliocentricXYZ(planet Planet) XYZ{
   //近日点通過時M
   perihelionPassageMJD := getMJD(
     Datetime{
-      year: planet.MJD.year,
-      month: planet.MJD.month,
-      day: planet.MJD.day,
-      hour: planet.MJD.hour,
-      minute: planet.MJD.minute,
+      year: planet.perihelionPassageMJD.year,
+      month: planet.perihelionPassageMJD.month,
+      day: planet.perihelionPassageMJD.day,
+      hour: planet.perihelionPassageMJD.hour,
+      minute: planet.perihelionPassageMJD.minute,
     },
   )
 
