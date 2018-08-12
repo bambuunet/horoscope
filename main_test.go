@@ -43,3 +43,13 @@ func TestGetGeocentricAngle(t *testing.T){
   fmt.Print(angle)
   fmt.Print("\n\n")
 }
+
+func TestGetEccentricAnomaly(t *testing.T){
+  M := 3.14159
+  e := 0.09341233
+  E := getEccentricAnomaly(M, e)
+
+  fmt.Print("TestGetEccentricAnomaly: \n")
+  fmt.Print(E)
+  fmt.Print("\n\n")
+}
